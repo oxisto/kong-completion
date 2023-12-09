@@ -1,12 +1,13 @@
 package kongcompletion
 
 import (
+	"errors"
 	"fmt"
-	"github.com/alecthomas/kong"
-	"github.com/pkg/errors"
-	"github.com/riywo/loginshell"
 	"os"
 	"path/filepath"
+
+	"github.com/alecthomas/kong"
+	"github.com/riywo/loginshell"
 )
 
 // Completion is a kong subcommand that prints out the shell code for
@@ -86,11 +87,11 @@ func detectShell() (shell, error) {
 func determineBinaryInfo(ctx *kong.Context) (binaryInfo, error) {
 	bin, err := os.Executable()
 	if err != nil {
-		return binaryInfo{}, errors.Wrapf(err, "couldn't determine absolute path to binary")
+		return binaryInfo{}, fmt.Errorf("couldn't determine absolute path to binary: %w", err)
 	}
 	bin, err = filepath.Abs(bin)
 	if err != nil {
-		return binaryInfo{}, errors.Wrapf(err, "couldn't determine absolute path to binary")
+		return binaryInfo{}, fmt.Errorf("couldn't determine absolute path to binary: %w", err)
 	}
 	return binaryInfo{ctx.Model.Name, bin, ctx.Selected().Name}, nil
 }

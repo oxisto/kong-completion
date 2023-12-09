@@ -1,8 +1,6 @@
 package kongcompletion
 
-import (
-	"github.com/pkg/errors"
-)
+import "errors"
 
 type shell struct {
 	// name is the name of the shell

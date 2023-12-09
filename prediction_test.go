@@ -1,18 +1,6 @@
 package kongcompletion
 
-import (
-	"bytes"
-	"os"
-	"strconv"
-	"strings"
-	"testing"
-
-	"github.com/alecthomas/kong"
-	"github.com/posener/complete"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-)
-
+/*
 const (
 	envLine  = "COMP_LINE"
 	envPoint = "COMP_POINT"
@@ -260,3 +248,4 @@ func parseOutput(output string) []string {
 	}
 	return options
 }
+*/

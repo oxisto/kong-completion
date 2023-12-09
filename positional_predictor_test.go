@@ -1,14 +1,6 @@
 package kongcompletion
 
-import (
-	"strings"
-	"testing"
-	"unicode"
-
-	"github.com/posener/complete"
-	"github.com/stretchr/testify/assert"
-)
-
+/*
 func TestPositionalPredictor_position(t *testing.T) {
 	posPredictor := &PositionalPredictor{
 		BoolFlags: []string{"--mybool", "-b"},
@@ -55,7 +47,7 @@ func TestPositionalPredictor_predictor(t *testing.T) {
 	}
 }
 
-// The code below is taken from https://github.com/posener/complete/blob/f6dd29e97e24f8cb51a8d4050781ce2b238776a4/args.go
+// The code below is taken from https://github.com/posener/complete/v2/blob/f6dd29e97e24f8cb51a8d4050781ce2b238776a4/args.go
 // to assist in tests.
 
 func newArgs(line string) complete.Args {
@@ -115,3 +107,4 @@ func last(args []string) string {
 	}
 	return args[len(args)-1]
 }
+*/

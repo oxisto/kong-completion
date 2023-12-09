@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/alecthomas/kong"
-	"github.com/jotaen/kong-completion"
-	"github.com/posener/complete"
 	"os"
 	"strings"
+
+	"github.com/alecthomas/kong"
+	kongcompletion "github.com/jotaen/kong-completion"
+	"github.com/posener/complete/v2/predict"
 )
 
 func main() {
@@ -50,7 +51,7 @@ type Hello struct {
 // Custom predictor. (Just as demo how these works.)
 var predictNames = kongcompletion.WithPredictor(
 	"name",
-	complete.PredictSet("Ben", "Liz", "Mark", "Sarah"),
+	predict.Set{"Ben", "Liz", "Mark", "Sarah"},
 )
 
 func (h *Hello) Run() error {

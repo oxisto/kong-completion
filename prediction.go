@@ -4,7 +4,8 @@ import (
 	"fmt"
 
 	"github.com/alecthomas/kong"
-	"github.com/posener/complete"
+	"github.com/posener/complete/v2"
+	"github.com/posener/complete/v2/predict"
 )
 
 const predictorTag = "predictor"
@@ -117,12 +118,14 @@ func Register(parser *kong.Kong, opt ...Option) {
 		errHandler(err)
 		exitFunc(1)
 	}
-	cmp := complete.New(parser.Model.Name, cmd)
+	cmd.Complete(parser.Model.Name)
+	//cmp := complete.New(parser.Model.Name, cmd)
+	/*cmp := complete.Complete(parser.Model.Name, cmd)
 	cmp.Out = parser.Stdout
 	done := cmp.Complete()
 	if done {
 		exitFunc(0)
-	}
+	}*/
 }
 
 func nodeCommand(node *kong.Node, opts *options) (*complete.Command, error) {
@@ -131,8 +134,8 @@ func nodeCommand(node *kong.Node, opts *options) (*complete.Command, error) {
 	}
 
 	cmd := complete.Command{
-		Sub:         complete.Commands{},
-		GlobalFlags: complete.Flags{},
+		Sub:   map[string]*complete.Command{},
+		Flags: map[string]complete.Predictor{},
 	}
 
 	for _, child := range node.Children {
@@ -144,7 +147,7 @@ func nodeCommand(node *kong.Node, opts *options) (*complete.Command, error) {
 			return nil, err
 		}
 		if childCmd != nil {
-			cmd.Sub[child.Name] = *childCmd
+			cmd.Sub[child.Name] = childCmd
 		}
 	}
 
@@ -156,20 +159,25 @@ func nodeCommand(node *kong.Node, opts *options) (*complete.Command, error) {
 		if err != nil {
 			return nil, err
 		}
-		for _, f := range flagNamesWithHyphens(flag) {
-			cmd.GlobalFlags[f] = predictor
+
+		cmd.Flags[flag.Name] = predictor
+		if flag.Short != 0 {
+			cmd.Flags[string(flag.Short)] = predictor
 		}
 	}
 
-	boolFlags, nonBoolFlags := boolAndNonBoolFlags(node.Flags)
+	//boolFlags, nonBoolFlags := boolAndNonBoolFlags(node.Flags)
 	pps, err := positionalPredictors(node.Positional, opts.predictors)
 	if err != nil {
 		return nil, err
 	}
-	cmd.Args = &PositionalPredictor{
+	/*cmd.Args = &PositionalPredictor{
 		Predictors: pps,
 		ArgFlags:   flagNamesWithHyphens(nonBoolFlags...),
 		BoolFlags:  flagNamesWithHyphens(boolFlags...),
+	}*/
+	if len(pps) > 0 {
+		cmd.Args = pps[0]
 	}
 
 	return &cmd, nil
@@ -181,7 +189,7 @@ func flagNamesWithHyphens(flags ...*kong.Flag) []string {
 		return names
 	}
 	for _, flag := range flags {
-		names = append(names, "--"+flag.Name)
+		names = append(names, "-"+flag.Name)
 		if flag.Short != 0 {
 			names = append(names, "-"+string(flag.Short))
 		}
@@ -241,15 +249,15 @@ func valuePredictor(value *kong.Value, predictors map[string]complete.Predictor)
 	}
 	switch {
 	case value.IsBool():
-		return complete.PredictNothing, nil
+		return predict.Nothing, nil
 	case value.Enum != "":
 		enumVals := make([]string, 0, len(value.EnumMap()))
 		for enumVal := range value.EnumMap() {
 			enumVals = append(enumVals, enumVal)
 		}
-		return complete.PredictSet(enumVals...), nil
+		return predict.Set(enumVals), nil
 	default:
-		return complete.PredictAnything, nil
+		return predict.Something, nil
 	}
 }
 

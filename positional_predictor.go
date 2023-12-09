@@ -1,11 +1,6 @@
 package kongcompletion
 
-import (
-	"strings"
-
-	"github.com/posener/complete"
-)
-
+/*
 // PositionalPredictor is a predictor for positional arguments
 type PositionalPredictor struct {
 	Predictors []complete.Predictor
@@ -14,17 +9,17 @@ type PositionalPredictor struct {
 }
 
 // Predict implements complete.Predict
-func (p *PositionalPredictor) Predict(a complete.Args) []string {
-	predictor := p.predictor(a)
+func (p *PositionalPredictor) Predict(prefix string) []string {
+	predictor := p.predictor(prefix)
 	if predictor == nil {
 		return []string{}
 	}
-	return predictor.Predict(a)
+	return predictor.Predict(prefix)
 }
 
-func (p *PositionalPredictor) predictor(a complete.Args) complete.Predictor {
-	position := p.predictorIndex(a)
-	complete.Log("predicting positional argument(%d)", position)
+func (p *PositionalPredictor) predictor(prefix string) complete.Predictor {
+	position := p.predictorIndex(prefix)
+	//complete.Log("predicting positional argument(%d)", position)
 	if position < 0 || position > len(p.Predictors)-1 {
 		return nil
 	}
@@ -32,7 +27,7 @@ func (p *PositionalPredictor) predictor(a complete.Args) complete.Predictor {
 }
 
 // predictorIndex returns the index in predictors to use. Returns -1 if no predictor should be used.
-func (p *PositionalPredictor) predictorIndex(a complete.Args) int {
+func (p *PositionalPredictor) predictorIndex(prefix string) int {
 	idx := 0
 	for i := 0; i < len(a.Completed); i++ {
 		if !p.nonPredictorPos(a, i) {
@@ -43,7 +38,7 @@ func (p *PositionalPredictor) predictorIndex(a complete.Args) int {
 }
 
 // nonPredictorPos returns true if the value at this position is either a flag or a flag's argument
-func (p *PositionalPredictor) nonPredictorPos(a complete.Args, pos int) bool {
+func (p *PositionalPredictor) nonPredictorPos(prefix string, pos int) bool {
 	if pos < 0 || pos > len(a.All)-1 {
 		return false
 	}
@@ -86,3 +81,4 @@ func (p *PositionalPredictor) nextValueIsFlagArg(val string) bool {
 	}
 	return false
 }
+*/
